@@ -2,13 +2,15 @@ console.log("Hiee from webpack! Working fine");
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Header from './components/header';
+import Wheather from './components/wheather';
 
 class Hello extends Component {
     render() {
         return (
             <div>
-                <h1>
-                Hello World! React working fine.</h1>
+                <Header/>
+                <Wheather/>
             </div>
         );
     }

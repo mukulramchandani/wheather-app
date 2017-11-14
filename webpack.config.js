@@ -10,8 +10,13 @@ module.exports = {
                 loader : 'babel-loader',
                 test : /\.jsx?$/,
                 exclude : /node_modules/
+            },
+            {
+                loader : ['style-loader','css-loader'],
+                test : /\.css?$/,
+                exclude : /node_modules/
             }
-        ]
+        ],
     },
     devServer : {
         port : 3000,
