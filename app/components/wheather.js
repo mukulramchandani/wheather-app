@@ -1,59 +1,89 @@
 import React, { Component, PropTypes } from 'react';
-
-    //Navigator Success Function
-      let  success = (pos) => {
-            const crd = pos.coords;
-            console.log(`${crd.latitude} \n ${crd.longitude}`);
-            console.log(pos); 
-        };
-    //Navigator Error Function
-        let error = (err) => {
-            console.log(err.code);
-        };
-        //JS built-in fn.
-    navigator.geolocation.getCurrentPosition(success,error);
-
+    
     //Snippet for adding Script tag.
-    const url1 = 'https://js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js';
-    const loadScript = (url) => {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
+    // const url1 = 'https://js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js';
+    // const loadScript = (url) => {
+    //     var script = document.createElement("script");
+    //     script.type = "text/javascript";
 
-        if(script.readyState){ //For IE
-            script.onreadystatechange = function(){
-                if(script.readyState == "loaded" ||
-             script.readyState == "completed"){
-                 script.onreadystatechange = null;
-             }
-            };
-        }
-        else{ //Others Browsers
-            script.onload = function(){
-                console.log("Tag added and Script Loaded!");
-            };
-        }
+    //     if(script.readyState){ //For IE
+    //         script.onreadystatechange = function(){
+    //             if(script.readyState == "loaded" ||
+    //          script.readyState == "completed"){
+    //              script.onreadystatechange = null;
+    //          }
+    //         };
+    //     }
+    //     else{ //Others Browsers
+    //         script.onload = function(){
+    //             console.log("Tag added and Script Loaded!");
+    //         };
+    //     }
 
-        script.src = url;
-        document.getElementsByTagName("head")[0].appendChild(script);
-    }
-    loadScript(url1);
+    //     script.src = url;
+    //     document.getElementsByTagName("head")[0].appendChild(script);
+    // }
+    // loadScript(url1);
 
     //GeoIP
-    const ipSuccess = (location) => {
-        console.log(location);
-    };
-    const ipError = (err) =>{
-        console.log(err);
-    }
+    // const ipSuccess = (location) => {
+    //     console.log(location);
+    // };
+    // const ipError = (err) =>{
+    //     console.log(err);
+    // }
 
 class Wheather extends Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            locationKey: "r",
+            city: "r",
+            state : "r"
+        };
     }
 
     componentWillMount() {
+        //Navigator Success Function
+      let  success = (pos) => {
+        const crd = pos.coords;
+        console.log(`${crd.latitude} \n ${crd.longitude}`);
+        fetch("https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=zm2EHwtpHiL55OWuTyv1FKsOAALSIPu0&q=" + `${crd.latitude},${crd.longitude}`)
+        .then(locData => locData.json())
+        .then( (data) => {
+            console.log(data.Key,data.LocalizedName,data.AdministrativeArea.LocalizedName)
+            this.setState({
+                locationKey : data.Key,
+                city: data.LocalizedName,
+                state: data.AdministrativeArea.LocalizedName
+            });
+            console.log(this.state);
+        });
+    };
 
+//Navigator Error Function
+    let error = (err) => {
+        console.log(err.code);
+        //Info. through IP.
+        fetch('https://ipinfo.io/json')
+        .then(ipdata => ipdata.json())
+        .then((json) => {
+            console.log(json.loc);
+            fetch("https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=zm2EHwtpHiL55OWuTyv1FKsOAALSIPu0&q="+`${json.loc}`)
+            .then(locData => locData.json())
+            .then(data => {
+                console.log(data.Key,data.LocalizedName,data.AdministrativeArea.LocalizedName);
+                this.setState({
+                    locationKey : data.Key,
+                    city:data.LocalizedName,
+                    state:data.AdministrativeArea.LocalizedName
+                })
+            })
+        })
+
+    };
+    //JS built-in fn.
+    navigator.geolocation.getCurrentPosition(success,error);    
     }
 
     componentDidMount() {
@@ -65,6 +95,7 @@ class Wheather extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        return false;
 
     }
 
@@ -83,8 +114,9 @@ class Wheather extends Component {
     render() {
         return (
             <div>
-            <p> diff compo </p>
-            
+            <p>
+            {this.state.locationKey}
+                </p>
          
             </div>
         );
