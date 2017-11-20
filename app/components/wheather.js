@@ -37,9 +37,13 @@ class Wheather extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            locationKey: "r",
-            city: "r",
-            state : "r"
+            locationKey: "",
+            city: "...",
+            state : "...",
+            valInC: "--",
+            valInF: "--",
+            
+
         };
     }
 
@@ -59,6 +63,7 @@ class Wheather extends Component {
             });
             console.log(this.state);
         });
+        
     };
 
 //Navigator Error Function
@@ -86,8 +91,8 @@ class Wheather extends Component {
     navigator.geolocation.getCurrentPosition(success,error);    
     }
 
-    componentDidMount() {
-        
+    componentWillUpdate() {
+            
     }
 
     componentWillReceiveProps(nextProps) {
@@ -95,15 +100,18 @@ class Wheather extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return false;
+        return true;
 
     }
 
-    componentWillUpdate(nextProps, nextState) {
+    // componentWillUpdate(nextProps, nextState) {
 
-    }
+    // }
 
     componentDidUpdate(prevProps, prevState) {
+        fetch("https://dataservice.accuweather.com/currentconditions/v1/"+ this.state.locationKey +"?apikey=zm2EHwtpHiL55OWuTyv1FKsOAALSIPu0&details=true")
+        .then(resp => resp.json())
+        .then(data => console.log(data[0]))
 
     }
 
@@ -116,7 +124,7 @@ class Wheather extends Component {
             <div>
             <p>
             {this.state.locationKey}
-                </p>
+             </p>
          
             </div>
         );
