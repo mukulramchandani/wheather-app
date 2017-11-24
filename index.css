@@ -1,3 +1,7 @@
+
+body{
+    margin: 0;
+   }
 .scene {
     width: 100%;
     height: 300px;
@@ -72,15 +76,15 @@
  
  /* general syntax */
  @keyframes cloudDrift {
-    from { transform: translateX(0px); }
-    to { transform: translateX(1000px); }
+     from { transform: translateX(0px); } 
+    to { transform: translateX(400px); }
  }
 
  .sun{
      position: absolute;
      height: inherit;
      top: -40%;
-     right: -15%;
+     right: 0;
      width:  auto;
      opacity: 0.7;
  }
@@ -99,4 +103,49 @@
      font-family: 'Berkshire Swash', cursive;
      text-align: center;
      font-size: 40px;
+ }
+
+ .bg-night{
+     position: relative;
+     }
+
+ .black{
+     background-color: #171616;
+     position: absolute;
+     bottom :0;
+     width: 100%;
+     color: transparent;
+     border-top-right-radius: 50px;
+     height: 5%;
+ }
+
+ .moon{
+     position: absolute;
+     height: 30%;
+     right:0px;
+
+ }
+ .light{
+     position: absolute;
+     bottom:3.5%;
+     left: 0;
+     height: 70%
+ }
+ .sky{
+     width: 100% ;
+     height: 350px;
+ }
+
+ .grey-cloud{
+     position: absolute;
+     top:5px;
+     height : 30%;
+
+ }
+
+ .disp{
+     display:block;
+ }
+ .no-disp{
+     display:none;
  }
