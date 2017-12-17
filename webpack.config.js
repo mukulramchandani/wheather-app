@@ -1,7 +1,7 @@
 module.exports = {
     entry : ['./app/index.js'],
     output : {
-        path : __dirname + '/build',
+        path : __dirname + "/build/",
         filename : 'bundle.js'
     },
     module : {
@@ -20,7 +20,7 @@ module.exports = {
     },
     devServer : {
         port : 3000,
-        contentBase: __dirname + '/build',
+        contentBase: __dirname + "/build/",
         inline : true,
     }
 }

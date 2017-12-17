@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -300,6 +300,21 @@ module.exports = emptyFunction;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(17);
+} else {
+  module.exports = __webpack_require__(18);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /*
 object-assign
 (c) Sindre Sorhus
@@ -393,7 +408,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -414,21 +429,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = emptyObject;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(16);
-} else {
-  module.exports = __webpack_require__(17);
-}
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -577,7 +577,7 @@ module.exports = warning;
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(5);
   var warning = __webpack_require__(6);
-  var ReactPropTypesSecret = __webpack_require__(18);
+  var ReactPropTypesSecret = __webpack_require__(19);
   var loggedTypeFailures = {};
 }
 
@@ -876,7 +876,7 @@ module.exports = shallowEqual;
  * 
  */
 
-var isTextNode = __webpack_require__(21);
+var isTextNode = __webpack_require__(22);
 
 /*eslint-disable no-bitwise */
 
@@ -937,11 +937,292 @@ module.exports = focusNode;
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(15);
+"use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var nocors = "http://cors-anywhere.herokuapp.com/";
+
+var Wheather = function (_Component) {
+    _inherits(Wheather, _Component);
+
+    function Wheather(props) {
+        _classCallCheck(this, Wheather);
+
+        var _this = _possibleConstructorReturn(this, (Wheather.__proto__ || Object.getPrototypeOf(Wheather)).call(this, props));
+
+        _this.state = {
+            locationKey: "",
+            city: "...",
+            parentCity: "",
+            state: "...",
+            countryID: "",
+            valInC: "--",
+            valInF: "--",
+            weatherText: "",
+            isChecked: false
+        };
+        return _this;
+    }
+
+    _createClass(Wheather, [{
+        key: "componentWillMount",
+        value: function componentWillMount() {
+            var _this2 = this;
+
+            //Navigator Success Function
+            var success = function success(pos) {
+                var crd = pos.coords;
+                console.log(crd.latitude + " \n " + crd.longitude);
+                fetch(nocors + "https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=zm2EHwtpHiL55OWuTyv1FKsOAALSIPu0&q=" + (crd.latitude + "," + crd.longitude)).then(function (locData) {
+                    return locData.json();
+                }).then(function (data) {
+                    console.log(data);
+                    _this2.setState({
+                        locationKey: data.Key,
+                        city: data.EnglishName,
+                        state: data.AdministrativeArea.EnglishName,
+                        //parentCity:data.ParentCity.EnglishName,
+                        countryID: data.Country.ID
+                    });
+                    if (Object.keys(data).length > 15) {
+                        _this2.setState({ parentCity: data.ParentCity.EnglishName });
+                    }
+                    console.log(_this2.state);
+                });
+            };
+
+            //Navigator Error Function
+            var error = function error(err) {
+                console.log(err);
+                //Info. through IP.
+                fetch(nocors + "https://ipinfo.io/json").then(function (ipdata) {
+                    return ipdata.json();
+                }).then(function (json) {
+                    console.log(json.loc);
+                    fetch(nocors + "https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=zm2EHwtpHiL55OWuTyv1FKsOAALSIPu0&q=" + ("" + json.loc)).then(function (locData) {
+                        return locData.json();
+                    }).then(function (data) {
+                        console.log(Object.keys(data).length);
+                        _this2.setState({
+                            locationKey: data.Key,
+                            city: data.EnglishName,
+                            state: data.AdministrativeArea.EnglishName,
+                            //parentCity:data.ParentCity.EnglishName,
+                            countryID: data.Country.ID
+                        });
+                        if (Object.keys(data).length > 15) {
+                            _this2.setState({ parentCity: data.ParentCity.EnglishName });
+                        }
+                    });
+                });
+            };
+            //JS built-in fn.
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+    }, {
+        key: "componentWillReceiveProps",
+        value: function componentWillReceiveProps(nextProps) {}
+    }, {
+        key: "shouldComponentUpdate",
+        value: function shouldComponentUpdate(nextProps, nextState) {
+            return true;
+        }
+
+        // componentWillUpdate(nextProps, nextState) {
+
+        // }
+
+    }, {
+        key: "componentDidUpdate",
+        value: function componentDidUpdate(prevProps, prevState) {
+            var _this3 = this;
+
+            fetch(nocors + "https://dataservice.accuweather.com/currentconditions/v1/" + this.state.locationKey + "?apikey=zm2EHwtpHiL55OWuTyv1FKsOAALSIPu0&details=false").then(function (resp) {
+                return resp.json();
+            }).then(function (data) {
+                console.log(data[0]);
+                //let temp = data[0].Temperature.Imperial.Value;
+                if (isNaN(_this3.state.valInC)) {
+                    _this3.setState({
+                        weatherText: data[0].WeatherText,
+                        valInF: data[0].Temperature.Imperial.Value,
+                        valInC: data[0].Temperature.Metric.Value
+                    });
+                    console.log(_this3.state);
+                }
+            });
+        }
+    }, {
+        key: "toggleChange",
+        value: function toggleChange() {
+            this.setState({
+                isChecked: !this.state.isChecked
+            });
+        }
+    }, {
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {}
+    }, {
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                null,
+                _react2.default.createElement("hr", null),
+                _react2.default.createElement(
+                    "p",
+                    { className: "btn-info" },
+                    "Toggle button to change to ",
+                    _react2.default.createElement(
+                        "span",
+                        { className: this.state.isChecked ? "disp" : "no-disp" },
+                        "Celcius"
+                    ),
+                    _react2.default.createElement(
+                        "span",
+                        { className: this.state.isChecked ? "no-disp" : "disp" },
+                        "Farenheit"
+                    )
+                ),
+                _react2.default.createElement(
+                    "div",
+                    { className: "weather" },
+                    _react2.default.createElement(
+                        "p",
+                        { className: "switch" },
+                        _react2.default.createElement("input", { type: "checkbox", checked: this.state.isChecked, onChange: this.toggleChange.bind(this) }),
+                        _react2.default.createElement("span", { className: "slider round" })
+                    ),
+                    _react2.default.createElement(
+                        "p",
+                        { className: "unit-name" },
+                        _react2.default.createElement(
+                            "span",
+                            { className: this.state.isChecked ? "no-disp" : "disp" },
+                            "Celcius"
+                        ),
+                        _react2.default.createElement(
+                            "span",
+                            { className: this.state.isChecked ? "disp" : "no-disp" },
+                            "Farenheit"
+                        )
+                    ),
+                    _react2.default.createElement(
+                        "div",
+                        { className: "data" },
+                        _react2.default.createElement(
+                            "h1",
+                            { className: this.state.isChecked ? "temp no-disp" : "temp disp" },
+                            this.state.valInC,
+                            " ",
+                            _react2.default.createElement(
+                                "span",
+                                { className: "degree" },
+                                "o"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "h1",
+                            { className: this.state.isChecked ? "temp disp" : "temp no-disp" },
+                            this.state.valInF,
+                            _react2.default.createElement(
+                                "span",
+                                { className: "degree" },
+                                "o"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "span",
+                            { className: "weather-text" },
+                            this.state.weatherText
+                        ),
+                        _react2.default.createElement("br", null),
+                        " ",
+                        _react2.default.createElement(
+                            "p",
+                            { className: "city-name" },
+                            this.state.city,
+                            ",",
+                            _react2.default.createElement(
+                                "span",
+                                { className: this.state.parentCity.length > 0 ? "" : "no-disp" },
+                                this.state.parentCity,
+                                ","
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "p",
+                            { className: "state-name" },
+                            this.state.state,
+                            ", ",
+                            this.state.countryID,
+                            "."
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    "h3",
+                    { className: "footer" },
+                    "Made with ",
+                    _react2.default.createElement(
+                        "span",
+                        { className: "heart" },
+                        " \u2764 "
+                    ),
+                    "using ReactJS."
+                ),
+                _react2.default.createElement("hr", null),
+                _react2.default.createElement("br", null),
+                _react2.default.createElement(
+                    "h5",
+                    { className: "footer" },
+                    " ",
+                    _react2.default.createElement(
+                        "a",
+                        { href: "https://github.com/mukulramchandani/wheather-app/", target: "blank" },
+                        " Click here to see the Source Code ! "
+                    ),
+                    " "
+                ),
+                _react2.default.createElement("img", { className: "foot-img", src: "https://i.imgur.com/LHKVXLn.png" })
+            );
+        }
+    }]);
+
+    return Wheather;
+}(_react.Component);
+
+Wheather.propTypes = {};
+
+exports.default = Wheather;
 
 /***/ }),
 /* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(16);
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -949,13 +1230,21 @@ module.exports = __webpack_require__(15);
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(4);
+var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(19);
+var _reactDom = __webpack_require__(20);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _header = __webpack_require__(29);
+
+var _header2 = _interopRequireDefault(_header);
+
+var _wheather = __webpack_require__(14);
+
+var _wheather2 = _interopRequireDefault(_wheather);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -982,11 +1271,8 @@ var Hello = function (_Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(
-                    'h1',
-                    null,
-                    'Hello World! React working fine.'
-                )
+                _react2.default.createElement(_header2.default, null),
+                _react2.default.createElement(_wheather2.default, null)
             );
         }
     }]);
@@ -997,7 +1283,7 @@ var Hello = function (_Component) {
 _reactDom2.default.render(_react2.default.createElement(Hello, null), document.getElementById('root'));
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1009,7 +1295,7 @@ _reactDom2.default.render(_react2.default.createElement(Hello, null), document.g
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var m=__webpack_require__(2),n=__webpack_require__(3),p=__webpack_require__(1);
+var m=__webpack_require__(3),n=__webpack_require__(4),p=__webpack_require__(1);
 function q(a){for(var b=arguments.length-1,e="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)e+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(e+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var r={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function t(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||r}t.prototype.isReactComponent={};t.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?q("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};t.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function u(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||r}function v(){}v.prototype=t.prototype;var w=u.prototype=new v;w.constructor=u;m(w,t.prototype);w.isPureReactComponent=!0;function x(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||r}var y=x.prototype=new v;y.constructor=x;m(y,t.prototype);y.unstable_isAsyncReactComponent=!0;y.render=function(){return this.props.children};
@@ -1026,7 +1312,7 @@ version:"16.1.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurren
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1045,9 +1331,9 @@ if (process.env.NODE_ENV !== "production") {
   (function() {
 'use strict';
 
-var _assign = __webpack_require__(2);
+var _assign = __webpack_require__(3);
 var invariant = __webpack_require__(5);
-var emptyObject = __webpack_require__(3);
+var emptyObject = __webpack_require__(4);
 var warning = __webpack_require__(6);
 var emptyFunction = __webpack_require__(1);
 var checkPropTypes = __webpack_require__(7);
@@ -2377,7 +2663,7 @@ module.exports = react;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2396,7 +2682,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2434,15 +2720,15 @@ if (process.env.NODE_ENV === 'production') {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(20);
+  module.exports = __webpack_require__(21);
 } else {
-  module.exports = __webpack_require__(23);
+  module.exports = __webpack_require__(24);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2457,7 +2743,7 @@ if (process.env.NODE_ENV === 'production') {
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(4),m=__webpack_require__(8),A=__webpack_require__(2),B=__webpack_require__(1),ca=__webpack_require__(9),da=__webpack_require__(10),ea=__webpack_require__(11),ha=__webpack_require__(12),ia=__webpack_require__(13),C=__webpack_require__(3);
+var aa=__webpack_require__(2),m=__webpack_require__(8),A=__webpack_require__(3),B=__webpack_require__(1),ca=__webpack_require__(9),da=__webpack_require__(10),ea=__webpack_require__(11),ha=__webpack_require__(12),ia=__webpack_require__(13),C=__webpack_require__(4);
 function D(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:D("227");
 var la={children:!0,dangerouslySetInnerHTML:!0,defaultValue:!0,defaultChecked:!0,innerHTML:!0,suppressContentEditableWarning:!0,suppressHydrationWarning:!0,style:!0};function qa(a,b){return(a&b)===b}
 var ra={MUST_USE_PROPERTY:1,HAS_BOOLEAN_VALUE:4,HAS_NUMERIC_VALUE:8,HAS_POSITIVE_NUMERIC_VALUE:24,HAS_OVERLOADED_BOOLEAN_VALUE:32,HAS_STRING_BOOLEAN_VALUE:64,injectDOMPropertyConfig:function(a){var b=ra,c=a.Properties||{},d=a.DOMAttributeNamespaces||{},e=a.DOMAttributeNames||{};a=a.DOMMutationMethods||{};for(var f in c){sa.hasOwnProperty(f)?D("48",f):void 0;var g=f.toLowerCase(),k=c[f];g={attributeName:g,attributeNamespace:null,propertyName:f,mutationMethod:null,mustUseProperty:qa(k,b.MUST_USE_PROPERTY),
@@ -2676,7 +2962,7 @@ Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.1.0",r
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2691,7 +2977,7 @@ Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.1.0",r
  * @typechecks
  */
 
-var isNode = __webpack_require__(22);
+var isNode = __webpack_require__(23);
 
 /**
  * @param {*} object The object to check.
@@ -2704,7 +2990,7 @@ function isTextNode(object) {
 module.exports = isTextNode;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2732,7 +3018,7 @@ function isNode(object) {
 module.exports = isNode;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2751,21 +3037,21 @@ if (process.env.NODE_ENV !== "production") {
   (function() {
 'use strict';
 
-var React = __webpack_require__(4);
+var React = __webpack_require__(2);
 var invariant = __webpack_require__(5);
 var warning = __webpack_require__(6);
 var ExecutionEnvironment = __webpack_require__(8);
-var _assign = __webpack_require__(2);
+var _assign = __webpack_require__(3);
 var emptyFunction$1 = __webpack_require__(1);
 var EventListener = __webpack_require__(9);
 var getActiveElement = __webpack_require__(10);
 var shallowEqual = __webpack_require__(11);
 var containsNode = __webpack_require__(12);
 var focusNode = __webpack_require__(13);
-var emptyObject = __webpack_require__(3);
+var emptyObject = __webpack_require__(4);
 var checkPropTypes = __webpack_require__(7);
-var hyphenateStyleName = __webpack_require__(24);
-var camelizeStyleName = __webpack_require__(26);
+var hyphenateStyleName = __webpack_require__(25);
+var camelizeStyleName = __webpack_require__(27);
 
 /**
  * WARNING: DO NOT manually require this module.
@@ -18098,7 +18384,7 @@ module.exports = reactDom;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18113,7 +18399,7 @@ module.exports = reactDom;
 
 
 
-var hyphenate = __webpack_require__(25);
+var hyphenate = __webpack_require__(26);
 
 var msPattern = /^ms-/;
 
@@ -18140,7 +18426,7 @@ function hyphenateStyleName(string) {
 module.exports = hyphenateStyleName;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18176,7 +18462,7 @@ function hyphenate(string) {
 module.exports = hyphenate;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18191,7 +18477,7 @@ module.exports = hyphenate;
 
 
 
-var camelize = __webpack_require__(27);
+var camelize = __webpack_require__(28);
 
 var msPattern = /^-ms-/;
 
@@ -18219,7 +18505,7 @@ function camelizeStyleName(string) {
 module.exports = camelizeStyleName;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18252,6 +18538,714 @@ function camelize(string) {
 }
 
 module.exports = camelize;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _index = __webpack_require__(30);
+
+var _index2 = _interopRequireDefault(_index);
+
+var _wheather = __webpack_require__(14);
+
+var _wheather2 = _interopRequireDefault(_wheather);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var hours = new Date().getHours();
+var isDayTime = hours > 5 && hours < 19;
+
+var Header = function (_Component) {
+    _inherits(Header, _Component);
+
+    function Header(props) {
+        _classCallCheck(this, Header);
+
+        var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
+
+        _this.state = {
+            day: "disp",
+            night: "no-disp"
+        };
+        return _this;
+    }
+
+    _createClass(Header, [{
+        key: 'render',
+        value: function render() {
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: isDayTime ? this.state.day : this.state.night },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'scene' },
+                        _react2.default.createElement('img', { className: 'sun', src: 'https://i.imgur.com/MdwJyGi.png' }),
+                        _react2.default.createElement('img', { className: 'cloud sml', src: 'http://www.dwuser.com/education/content/creating-keyframe-animations-with-css3/images/cloud_sml.png', width: '70', height: '36' }),
+                        _react2.default.createElement('img', { className: 'cloud med', src: 'http://www.dwuser.com/education/content/creating-keyframe-animations-with-css3/images/cloud_med.png', width: '100', height: '52' }),
+                        _react2.default.createElement('img', { className: 'cloud lrg', src: 'http://www.dwuser.com/education/content/creating-keyframe-animations-with-css3/images/cloud_lrg.png', width: '130', height: '67' }),
+                        _react2.default.createElement('img', { className: 'blades', src: 'http://www.dwuser.com/education/content/creating-keyframe-animations-with-css3/images/blades.png', width: '120', height: '120' }),
+                        _react2.default.createElement('img', { className: 'stand', src: 'http://www.dwuser.com/education/content/creating-keyframe-animations-with-css3/images/stand.png', width: '12', height: '130' }),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'green' },
+                            ' __'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'h1',
+                        { className: 'heading-text' },
+                        'Weather App'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: isDayTime ? this.state.night : this.state.day },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'bg-night' },
+                        _react2.default.createElement('img', { className: 'light', src: 'https://i.imgur.com/Y2jfB4W.png' }),
+                        _react2.default.createElement('img', { className: 'moon', src: 'https://i.imgur.com/A1ODH3N.png' }),
+                        _react2.default.createElement('img', { className: 'grey-cloud cloud sml', src: 'https://i.imgur.com/LM2CKD3.png' }),
+                        _react2.default.createElement('img', { className: 'grey-cloud cloud med', src: 'https://i.imgur.com/Ek0u6bt.png' }),
+                        _react2.default.createElement('img', { className: 'sky', src: 'https://i.imgur.com/ypxixf4.png' }),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'black' },
+                            ' __'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'h1',
+                        { className: 'heading-text' },
+                        'Weather App'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Header;
+}(_react.Component);
+
+exports.default = Header;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(31);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(33)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./node_modules/css-loader/index.js!./index.css", function() {
+			var newContent = require("!!./node_modules/css-loader/index.js!./index.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(32)(undefined);
+// imports
+exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Berkshire+Swash);", ""]);
+
+// module
+exports.push([module.i, "\r\nbody{\r\n    margin: 0;\r\n    background-color: #fffaae;\r\n   }\r\n.scene {\r\n    width: 100%;\r\n    height: 300px;\r\n    position: relative;\r\n    overflow: hidden;\r\n    /* Solid fallback for old browsers */\r\n    background: #0099ff;\r\n    /* general syntax */\r\n    background: linear-gradient(top, #0099ff, #00ccff);\r\n }\r\n\r\n /* Image Properties */\r\n \r\n .blades {\r\n    /*image is 120 x 120 px*/\r\n    position: absolute;\r\n    top: 38%;\r\n    left: 61px;\r\n    /* general syntax */\r\n    animation: bladeSpin 10s ease-in-out infinite;\r\n }\r\n \r\n .stand {\r\n    /*image is 12 x 130 px*/\r\n    position: absolute;\r\n\r\n    bottom: 0%;\r\n    left: 115px;\r\n }\r\n \r\n .cloud {\r\n    position: absolute;\r\n    /* general syntax */\r\n    animation: cloudDrift linear infinite;\r\n }\r\n \r\n .lrg {\r\n    /*width 130px*/\r\n    top: 40px;\r\n    left: -140px;\r\n    /* general syntax */\r\n    animation-duration: 40s;\r\n }\r\n .sml {\r\n    /*width 70px*/\r\n    top: 10px;\r\n    left: -80px;\r\n    /* general syntax */\r\n    animation-duration: 20s;\r\n }\r\n .med {\r\n    /*width 100px*/\r\n    top: 80px;\r\n    left: -110px;\r\n \r\n    /* general syntax */\r\n    animation-duration: 30s;\r\n }\r\n \r\n /* Keyframe animations */\r\n \r\n /* Blades Spinning */\r\n  \r\n /* general syntax */\r\n @keyframes bladeSpin {\r\n    from { transform: rotate(0deg); }\r\n    to { transform: rotate(1440deg); }\r\n }\r\n \r\n \r\n /* Clouds drifting */\r\n \r\n /* general syntax */\r\n @keyframes cloudDrift {\r\n     from { transform: translateX(0px); } \r\n    to { transform: translateX(400px); }\r\n }\r\n\r\n .sun{\r\n     position: absolute;\r\n     height: inherit;\r\n     top: -40%;\r\n     right: 0;\r\n     width:  auto;\r\n     opacity: 0.7;\r\n }\r\n .green{\r\n     background-color: greenyellow;\r\n     position: absolute;\r\n     bottom: 0;\r\n     width: 100%;\r\n     color: transparent;\r\n     border-top-left-radius: 25px;\r\n     border-top-right-radius: 15px;\r\n }\r\n\r\n .heading-text{\r\n     font-family: 'Berkshire Swash', cursive;\r\n     text-align: center;\r\n     font-size: 40px;\r\n }\r\n\r\n .bg-night{\r\n     position: relative;\r\n     }\r\n\r\n .black{\r\n     background-color: #171616;\r\n     position: absolute;\r\n     bottom :0;\r\n     width: 100%;\r\n     color: transparent;\r\n     border-top-right-radius: 50px;\r\n     height: 5%;\r\n }\r\n\r\n .moon{\r\n     position: absolute;\r\n     height: 30%;\r\n     right:0px;\r\n\r\n }\r\n .light{\r\n     position: absolute;\r\n     bottom:3.5%;\r\n     left: 0;\r\n     height: 70%\r\n }\r\n .sky{\r\n     width: 100% ;\r\n     height: 350px;\r\n }\r\n\r\n .grey-cloud{\r\n     position: absolute;\r\n     top:5px;\r\n     height : 30%;\r\n\r\n }\r\n\r\n .disp{\r\n     display:block;\r\n }\r\n .no-disp{\r\n     display:none;\r\n }\r\n\r\n .weather{\r\n  \r\n }\r\n .data-bg{\r\n     width:100%;\r\n     position: absolute;\r\n     opacity:0.75;\r\n }\r\n .data{\r\n     margin: 0px auto;\r\n     text-align: center;\r\n     font-size: 50px;\r\n     width: 300px;\r\n     background-color: rgba(140, 140, 224, 0.35);\r\n     border-radius: 30px;\r\n     padding: 5px;\r\n }\r\n .degree{\r\n     position: absolute;\r\n     font-size: 25px !important;\r\n }\r\n.temp{\r\n    margin-bottom: -10%;\r\n    margin-top: 0%;\r\n   \r\n}\r\n\r\n /* The switch - the box around the slider */\r\n .switch {\r\n    position: relative;\r\n    display: block;\r\n    width: 60px;\r\n    height: 34px;\r\n    margin: 0px auto;\r\n  }\r\n  \r\n  /* Hide default HTML checkbox */\r\n  .switch input {\r\n      display:block;\r\n      width: inherit;\r\n      height: inherit;\r\n      position: absolute;\r\n      z-index: 9999;\r\n      opacity: 0;\r\n\r\n}\r\n  \r\n  /* The slider */\r\n  .slider {\r\n    position: absolute;\r\n    cursor: pointer;\r\n    top: 0;\r\n    left: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    background-color: rgb(0, 199, 83);\r\n    -webkit-transition: .4s;\r\n    transition: .4s;\r\n  }\r\n  \r\n  .slider:before {\r\n    position: absolute;\r\n    content: \"\";\r\n    height: 26px;\r\n    width: 26px;\r\n    left: 4px;\r\n    bottom: 4px;\r\n    background-color: white;\r\n    -webkit-transition: .4s;\r\n    transition: .4s;\r\n  }\r\n  \r\n  input:checked + .slider {\r\n    background-color: #2196F3;\r\n  }\r\n  \r\n  input:focus + .slider {\r\n    box-shadow: 0 0 1px #2196F3;\r\n  }\r\n  \r\n  input:checked + .slider:before {\r\n    -webkit-transform: translateX(26px);\r\n    -ms-transform: translateX(26px);\r\n    transform: translateX(26px);\r\n  }\r\n  \r\n  /* Rounded sliders */\r\n  .slider.round {\r\n    border-radius: 34px;\r\n  }\r\n  \r\n  .slider.round:before {\r\n    border-radius: 50%;\r\n  } \r\n\r\n  .btn-info{\r\n      text-align:center;\r\n      margin: 0px auto;\r\n      padding-top: 20px;\r\n  }\r\n  .unit-name{\r\n      text-align:center;\r\n      width:100px; \r\n      margin: 0px auto;\r\n      font-size:25px;\r\n      font-style: oblique;\r\n      font-family: monospace;\r\n  }\r\n  .state-name{\r\n    font-style: normal;\r\n    font-family: monospace;\r\n    font-size: 30px;\r\n    line-height: 1;\r\n    margin:0px 0px 10px 0px;\r\n  }\r\n  .city-name{    \r\n    font-family: monospace;\r\n    font-size: 35px;\r\n    font-weight: 550;\r\n    margin: 0px;\r\n  }\r\n.weather-text{  \r\n    font-family: cursive , monospace;\r\n    font-style: oblique;\r\n    margin-top: 24px;\r\n    font-size: 40px;\r\n    opacity: 0.5;\r\n}\r\n.footer{\r\n    text-align: center;\r\n    font-family: 'Berkshire Swash', cursive;\r\n    margin: 40px 0px 0px 0px;\r\n}\r\n.heart{\r\n    color: red;\r\n    font-size: 23px;\r\n}\r\nhr{\r\n    width: 52%;\r\n    border: 0.5px solid #acab9e;\r\n    margin-top: -35px;\r\n    opacity: 1;\r\n    border-radius: 1px;\r\n}\r\n.foot-img{\r\n    display:block;\r\n    width: 40px;\r\n    margin:0px auto;\r\n}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
+		}
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(34);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
 
 /***/ })
 /******/ ]);

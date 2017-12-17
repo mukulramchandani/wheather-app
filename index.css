@@ -1,6 +1,7 @@
 
 body{
     margin: 0;
+    background-color: #fffaae;
    }
 .scene {
     width: 100%;
@@ -149,3 +150,153 @@ body{
  .no-disp{
      display:none;
  }
+
+ .weather{
+  
+ }
+ .data-bg{
+     width:100%;
+     position: absolute;
+     opacity:0.75;
+ }
+ .data{
+     margin: 0px auto;
+     text-align: center;
+     font-size: 50px;
+     width: 300px;
+     background-color: rgba(140, 140, 224, 0.35);
+     border-radius: 30px;
+     padding: 5px;
+ }
+ .degree{
+     position: absolute;
+     font-size: 25px !important;
+ }
+.temp{
+    margin-bottom: -10%;
+    margin-top: 0%;
+   
+}
+
+ /* The switch - the box around the slider */
+ .switch {
+    position: relative;
+    display: block;
+    width: 60px;
+    height: 34px;
+    margin: 0px auto;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+      display:block;
+      width: inherit;
+      height: inherit;
+      position: absolute;
+      z-index: 9999;
+      opacity: 0;
+
+}
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(0, 199, 83);
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  } 
+
+  .btn-info{
+      text-align:center;
+      margin: 0px auto;
+      padding-top: 20px;
+  }
+  .unit-name{
+      text-align:center;
+      width:100px; 
+      margin: 0px auto;
+      font-size:25px;
+      font-style: oblique;
+      font-family: monospace;
+  }
+  .state-name{
+    font-style: normal;
+    font-family: monospace;
+    font-size: 30px;
+    line-height: 1;
+    margin:0px 0px 10px 0px;
+  }
+  .city-name{    
+    font-family: monospace;
+    font-size: 35px;
+    font-weight: 550;
+    margin: 0px;
+  }
+.weather-text{  
+    font-family: cursive , monospace;
+    font-style: oblique;
+    margin-top: 24px;
+    font-size: 40px;
+    opacity: 0.5;
+}
+.footer{
+    text-align: center;
+    font-family: 'Berkshire Swash', cursive;
+    margin: 40px 0px 0px 0px;
+}
+.heart{
+    color: red;
+    font-size: 23px;
+}
+hr{
+    width: 52%;
+    border: 0.5px solid #acab9e;
+    margin-top: -35px;
+    opacity: 1;
+    border-radius: 1px;
+}
+.foot-img{
+    display:block;
+    width: 40px;
+    margin:0px auto;
+}

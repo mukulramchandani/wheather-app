@@ -32,7 +32,7 @@ class Header extends Component {
        <div className="green"> __</div>    
        
                  </div>
-                 <h1 className="heading-text">Wheather App</h1>
+                 <h1 className="heading-text">Weather App</h1>
                  </div>
                 <div className={ isDayTime ? this.state.night : this.state.day }>
                  <div className="bg-night">
@@ -43,7 +43,7 @@ class Header extends Component {
                  <img className="sky" src="https://i.imgur.com/ypxixf4.png"/>
                  <div className="black"> __</div>
                  </div>
-                 <h1 className="heading-text">Wheather App</h1>
+                 <h1 className="heading-text">Weather App</h1>
                  </div>  
             </div>
         );
